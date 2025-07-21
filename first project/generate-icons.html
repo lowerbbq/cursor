@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generate App Icons</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .icon {
+            margin: 20px;
+            border: 2px solid white;
+            border-radius: 20px;
+            display: inline-block;
+        }
+        h1 {
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        p {
+            color: white;
+            font-size: 14px;
+            max-width: 600px;
+            margin: 0 auto 30px;
+        }
+    </style>
+</head>
+<body>
+    <h1>App Icons Generator</h1>
+    <p>Right-click on each icon below and "Save image as..." to download. Save the first as "icon-192.png" and the second as "icon-512.png"</p>
+    
+    <!-- 192x192 Icon -->
+    <div class="icon">
+        <svg width="192" height="192" viewBox="0 0 192 192" xmlns="http://www.w3.org/2000/svg">
+            <!-- Background -->
+            <defs>
+                <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+                </linearGradient>
+            </defs>
+            <rect width="192" height="192" fill="url(#bg)" rx="20"/>
+            
+            <!-- Bouncing Balls -->
+            <circle cx="50" cy="60" r="18" fill="#FF6B6B" stroke="white" stroke-width="2"/>
+            <circle cx="100" cy="45" r="15" fill="#4ECDC4" stroke="white" stroke-width="2"/>
+            <circle cx="140" cy="75" r="20" fill="#45B7D1" stroke="white" stroke-width="2"/>
+            <circle cx="70" cy="110" r="16" fill="#96CEB4" stroke="white" stroke-width="2"/>
+            <circle cx="125" cy="125" r="19" fill="#FFEAA7" stroke="white" stroke-width="2"/>
+            
+            <!-- Girl Character -->
+            <g transform="translate(40, 140)">
+                <!-- Body -->
+                <ellipse cx="0" cy="0" rx="8" ry="15" fill="#FF69B4"/>
+                <!-- Head -->
+                <circle cx="0" cy="-20" r="8" fill="#FFDBAC"/>
+                <!-- Hair -->
+                <path d="M -8,-25 A 8,8 0 0,1 8,-25" fill="#8B4513"/>
+                <!-- Pigtails -->
+                <circle cx="-6" cy="-22" r="2" fill="#8B4513"/>
+                <circle cx="6" cy="-22" r="2" fill="#8B4513"/>
+                <!-- Eyes -->
+                <circle cx="-3" cy="-20" r="1" fill="black"/>
+                <circle cx="3" cy="-20" r="1" fill="black"/>
+            </g>
+            
+            <!-- Boy Character -->
+            <g transform="translate(150, 140)">
+                <!-- Body -->
+                <rect x="-8" y="-10" width="16" height="20" fill="#4169E1"/>
+                <!-- Head -->
+                <circle cx="0" cy="-20" r="8" fill="#FFDBAC"/>
+                <!-- Hair -->
+                <path d="M -8,-25 A 8,8 0 0,1 8,-25" fill="#654321"/>
+                <!-- Spiky hair -->
+                <circle cx="-4" cy="-28" r="1.5" fill="#654321"/>
+                <circle cx="0" cy="-30" r="1.5" fill="#654321"/>
+                <circle cx="4" cy="-28" r="1.5" fill="#654321"/>
+                <!-- Eyes -->
+                <circle cx="-3" cy="-20" r="1" fill="black"/>
+                <circle cx="3" cy="-20" r="1" fill="black"/>
+            </g>
+            
+            <!-- Game Title -->
+            <text x="96" y="35" text-anchor="middle" fill="white" font-size="12" font-weight="bold" font-family="Arial">BOUNCING</text>
+            <text x="96" y="180" text-anchor="middle" fill="white" font-size="12" font-weight="bold" font-family="Arial">BALLS</text>
+        </svg>
+    </div>
+    
+    <!-- 512x512 Icon -->
+    <div class="icon">
+        <svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+            <!-- Background -->
+            <defs>
+                <linearGradient id="bg2" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+                </linearGradient>
+                <filter id="glow">
+                    <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                    <feMerge> 
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+            </defs>
+            <rect width="512" height="512" fill="url(#bg2)" rx="50"/>
+            
+            <!-- Bouncing Balls with glow -->
+            <circle cx="120" cy="150" r="45" fill="#FF6B6B" stroke="white" stroke-width="4" filter="url(#glow)"/>
+            <circle cx="250" cy="120" r="35" fill="#4ECDC4" stroke="white" stroke-width="4" filter="url(#glow)"/>
+            <circle cx="380" cy="180" r="50" fill="#45B7D1" stroke="white" stroke-width="4" filter="url(#glow)"/>
+            <circle cx="180" cy="280" r="40" fill="#96CEB4" stroke="white" stroke-width="4" filter="url(#glow)"/>
+            <circle cx="330" cy="320" r="48" fill="#FFEAA7" stroke="white" stroke-width="4" filter="url(#glow)"/>
+            <circle cx="80" cy="350" r="38" fill="#DDA0DD" stroke="white" stroke-width="4" filter="url(#glow)"/>
+            <circle cx="420" cy="300" r="42" fill="#98D8C8" stroke="white" stroke-width="4" filter="url(#glow)"/>
+            
+            <!-- Girl Character (scaled up) -->
+            <g transform="translate(150, 400) scale(2.5)">
+                <!-- Body -->
+                <ellipse cx="0" cy="0" rx="12" ry="20" fill="#FF69B4"/>
+                <!-- Arms -->
+                <line x1="-12" y1="-5" x2="-18" y2="8" stroke="#FFDBAC" stroke-width="4" stroke-linecap="round"/>
+                <line x1="12" y1="-5" x2="18" y2="8" stroke="#FFDBAC" stroke-width="4" stroke-linecap="round"/>
+                <!-- Legs -->
+                <line x1="-5" y1="15" x2="-5" y2="30" stroke="#FFDBAC" stroke-width="4" stroke-linecap="round"/>
+                <line x1="5" y1="15" x2="5" y2="30" stroke="#FFDBAC" stroke-width="4" stroke-linecap="round"/>
+                <!-- Head -->
+                <circle cx="0" cy="-25" r="12" fill="#FFDBAC"/>
+                <!-- Hair -->
+                <path d="M -12,-32 A 12,12 0 0,1 12,-32" fill="#8B4513"/>
+                <!-- Pigtails -->
+                <circle cx="-8" cy="-28" r="3" fill="#8B4513"/>
+                <circle cx="8" cy="-28" r="3" fill="#8B4513"/>
+                <!-- Eyes -->
+                <circle cx="-4" cy="-25" r="1.5" fill="black"/>
+                <circle cx="4" cy="-25" r="1.5" fill="black"/>
+                <!-- Sparkles -->
+                <circle cx="-3" cy="-27" r="0.5" fill="white"/>
+                <circle cx="3" cy="-27" r="0.5" fill="white"/>
+                <!-- Smile -->
+                <path d="M -3,-20 Q 0,-18 3,-20" stroke="black" stroke-width="1" fill="none"/>
+            </g>
+            
+            <!-- Boy Character (scaled up) -->
+            <g transform="translate(360, 400) scale(2.5)">
+                <!-- Body -->
+                <rect x="-12" y="-10" width="24" height="25" fill="#4169E1"/>
+                <!-- Pants -->
+                <rect x="-8" y="10" width="16" height="15" fill="#2F4F4F"/>
+                <!-- Arms -->
+                <line x1="-12" y1="-5" x2="-18" y2="8" stroke="#FFDBAC" stroke-width="4" stroke-linecap="round"/>
+                <line x1="12" y1="-5" x2="18" y2="8" stroke="#FFDBAC" stroke-width="4" stroke-linecap="round"/>
+                <!-- Legs -->
+                <line x1="-5" y1="20" x2="-5" y2="35" stroke="#FFDBAC" stroke-width="4" stroke-linecap="round"/>
+                <line x1="5" y1="20" x2="5" y2="35" stroke="#FFDBAC" stroke-width="4" stroke-linecap="round"/>
+                <!-- Head -->
+                <circle cx="0" cy="-25" r="12" fill="#FFDBAC"/>
+                <!-- Hair -->
+                <path d="M -12,-30 A 12,12 0 0,1 12,-30" fill="#654321"/>
+                <!-- Spiky hair -->
+                <circle cx="-6" cy="-35" r="2" fill="#654321"/>
+                <circle cx="0" cy="-37" r="2" fill="#654321"/>
+                <circle cx="6" cy="-35" r="2" fill="#654321"/>
+                <!-- Eyes -->
+                <circle cx="-4" cy="-25" r="1.5" fill="black"/>
+                <circle cx="4" cy="-25" r="1.5" fill="black"/>
+                <!-- Sparkles -->
+                <circle cx="-3" cy="-27" r="0.5" fill="white"/>
+                <circle cx="3" cy="-27" r="0.5" fill="white"/>
+                <!-- Smile -->
+                <path d="M -3,-20 Q 0,-18 3,-20" stroke="black" stroke-width="1" fill="none"/>
+            </g>
+            
+            <!-- Game Title -->
+            <text x="256" y="80" text-anchor="middle" fill="white" font-size="36" font-weight="bold" font-family="Arial">BOUNCING BALLS</text>
+            <text x="256" y="480" text-anchor="middle" fill="white" font-size="24" font-weight="bold" font-family="Arial">2-PLAYER COMPETITION</text>
+        </svg>
+    </div>
+    
+    <p style="margin-top: 30px;">
+        <strong>Instructions:</strong><br>
+        1. Right-click on the first icon → "Save image as..." → Save as "icon-192.png"<br>
+        2. Right-click on the second icon → "Save image as..." → Save as "icon-512.png"<br>
+        3. Place both PNG files in the same folder as your index.html file
+    </p>
+</body>
+</html> 
