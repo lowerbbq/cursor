@@ -416,7 +416,7 @@
     <!-- Game Mode Selection -->
     <div id="modeSelection" class="mode-selection">
         <div class="mode-content">
-            <h1 class="mode-title">🏆 Bouncing Balls Race to 10,000! 🏀</h1>
+            <h1 class="mode-title">🏆 Bouncing Balls Race to 1,000! 🏀</h1>
             <p style="font-size: 16px; margin-bottom: 30px;">Choose your game mode:</p>
             
             <div class="mode-buttons">
@@ -432,18 +432,18 @@
         </div>
     </div>
 
-    <h1 id="gameTitle" style="display: none;">🏆 2-Player Bouncing Balls Race to 10,000! 🏀</h1>
+    <h1 id="gameTitle" style="display: none;">🏆 2-Player Bouncing Balls Race to 1,000! 🏀</h1>
     
     <div class="game-container" id="gameContainer" style="display: none;">
         <div class="top-controls">
             <div class="score-board">
                 <div style="color: #FF69B4; font-weight: bold;">👧 Player 1 (Girl)</div>
-                <div>Score: <span id="player1Score">0</span> / 10,000</div>
+                <div>Score: <span id="player1Score">0</span> / 1,000</div>
                 <div>Clicks: <span id="player1Clicks">0</span></div>
             </div>
             <div class="score-board">
                 <div style="color: #4169E1; font-weight: bold;" id="player2Label">👦 Player 2 (Boy)</div>
-                <div>Score: <span id="player2Score">0</span> / 10,000</div>
+                <div>Score: <span id="player2Score">0</span> / 1,000</div>
                 <div>Clicks: <span id="player2Clicks">0</span></div>
             </div>
             <div class="sound-controls">
@@ -458,7 +458,10 @@
                 Touch & drag on mobile
             </div>
             <div class="controls-info" style="background: rgba(255,215,0,0.3); padding: 8px 15px; border-radius: 15px; backdrop-filter: blur(10px); border: 2px solid #FFD700; color: white; text-align: center; font-size: 12px; margin-top: 10px;">
-                <strong>🏆 Win Condition:</strong> First player to reach <strong>10,000 points</strong> wins the game!
+                <strong>🏆 Win Condition:</strong> First player to reach <strong>1,000 points</strong> wins the game!
+            </div>
+            <div class="controls-info" style="background: rgba(255,69,0,0.3); padding: 8px 15px; border-radius: 15px; backdrop-filter: blur(10px); border: 2px solid #FF4500; color: white; text-align: center; font-size: 11px; margin-top: 5px;">
+                <strong>⚠️ Anti-Camping Rules:</strong> Must keep moving to score from corner balls • 1-second cooldown per ball
             </div>
         </div>
         
@@ -491,7 +494,7 @@
             <h1 class="winner-title" id="winnerTitle">🎉 WINNER! 🎉</h1>
             <div class="winner-score" id="winnerDetails">
                 <div id="winnerPlayer">Player 1 Wins!</div>
-                <div>Final Score: <span id="winnerScore">10,000</span> points</div>
+                <div>Final Score: <span id="winnerScore">1,000</span> points</div>
                 <div>Total Clicks: <span id="winnerClicks">0</span></div>
             </div>
             <div class="winner-buttons">
@@ -526,7 +529,7 @@
         let soundEnabled = true;
         let volume = 0.5;
         let gameWon = false;
-        const WINNING_SCORE = 10000;
+        const WINNING_SCORE = 1000;
         let gameMode = null; // 'single' or 'multiplayer'
         let isAIPlayer = false;
 
@@ -541,7 +544,7 @@
             direction: 'right',
             animationFrame: 0,
             walkCycle: 0,
-            lastMoveTime: 0,
+            lastMoveTime: Date.now(),
             scale: 1.5,  // Make the girl bigger
             type: 'girl'
         };
@@ -556,7 +559,7 @@
             direction: 'left',
             animationFrame: 0,
             walkCycle: 0,
-            lastMoveTime: 0,
+            lastMoveTime: Date.now(),
             scale: 1.5,
             type: 'boy'
         };
@@ -627,6 +630,9 @@
                 this.bounce = 0.8;
                 this.bounceCount = 0;
                 this.lastInteraction = 0; // Track when ball was last touched
+                this.lastScored = 0; // Track when ball was last scored
+                this.scoreCooldown = 1000; // 1 second cooldown between scores
+                this.cornerCampingPrevention = 2000; // 2 seconds required movement in corners
             }
 
             update() {
@@ -674,12 +680,45 @@
                 this.y = Math.max(this.radius + 1, Math.min(canvas.height - this.radius - 1, this.y));
             }
 
+            // Check if ball is in a corner
+            isInCorner() {
+                const cornerThreshold = 80; // Distance from corner to be considered "in corner"
+                
+                // Check each corner
+                const nearTopLeft = this.x < cornerThreshold && this.y < cornerThreshold;
+                const nearTopRight = this.x > (canvas.width - cornerThreshold) && this.y < cornerThreshold;
+                const nearBottomLeft = this.x < cornerThreshold && this.y > (canvas.height - cornerThreshold);
+                const nearBottomRight = this.x > (canvas.width - cornerThreshold) && this.y > (canvas.height - cornerThreshold);
+                
+                return nearTopLeft || nearTopRight || nearBottomLeft || nearBottomRight;
+            }
+
             // Method to handle user click on ball
             onBallClick(playerNumber = 1) {
                 if (gameWon) return; // Don't allow scoring if game is won
                 
+                const currentTime = Date.now();
+                
+                // Check cooldown - prevent rapid scoring on same ball
+                if (currentTime - this.lastScored < this.scoreCooldown) {
+                    return; // Too soon to score again
+                }
+                
+                // Anti-camping rule: if ball is in corner, player must be moving
+                if (this.isInCorner()) {
+                    const player = playerNumber === 1 ? player1 : player2;
+                    
+                    // Check if player has been moving recently
+                    if (currentTime - player.lastMoveTime > this.cornerCampingPrevention) {
+                        // Player hasn't moved recently in corner - no points!
+                        playBounceSound(150, 0.05); // Play different sound for blocked score
+                        return;
+                    }
+                }
+                
                 this.bounceCount++;
-                this.lastInteraction = Date.now(); // Mark as recently touched
+                this.lastInteraction = currentTime;
+                this.lastScored = currentTime; // Mark when this ball was scored
                 const points = Math.floor(this.radius / 5);
                 
                 if (playerNumber === 1) {
@@ -706,6 +745,10 @@
             }
 
             draw() {
+                const isInCornerArea = this.isInCorner();
+                const currentTime = Date.now();
+                const onCooldown = (currentTime - this.lastScored) < this.scoreCooldown;
+                
                 ctx.beginPath();
                 ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
                 
@@ -719,10 +762,44 @@
                 ctx.fillStyle = gradient;
                 ctx.fill();
                 
+                // Highlight shine
                 ctx.beginPath();
                 ctx.arc(this.x - this.radius/3, this.y - this.radius/3, this.radius/4, 0, Math.PI * 2);
                 ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
                 ctx.fill();
+                
+                // Visual indicators
+                if (isInCornerArea) {
+                    // Corner warning - red border
+                    ctx.strokeStyle = 'rgba(255, 0, 0, 0.8)';
+                    ctx.lineWidth = 3;
+                    ctx.setLineDash([5, 5]);
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.radius + 5, 0, Math.PI * 2);
+                    ctx.stroke();
+                    ctx.setLineDash([]); // Reset line dash
+                    
+                    // Warning icon
+                    ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+                    ctx.font = `${this.radius * 0.6}px Arial`;
+                    ctx.textAlign = 'center';
+                    ctx.fillText('⚠️', this.x, this.y - this.radius - 10);
+                }
+                
+                if (onCooldown) {
+                    // Cooldown indicator - gray overlay
+                    ctx.fillStyle = 'rgba(128, 128, 128, 0.5)';
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                    ctx.fill();
+                    
+                    // Cooldown timer
+                    const remainingCooldown = Math.ceil((this.scoreCooldown - (currentTime - this.lastScored)) / 1000);
+                    ctx.fillStyle = 'white';
+                    ctx.font = `${this.radius * 0.4}px Arial`;
+                    ctx.textAlign = 'center';
+                    ctx.fillText(remainingCooldown, this.x, this.y + 3);
+                }
                 
                 ctx.closePath();
             }
@@ -816,24 +893,30 @@
         function updatePlayers() {
             if (gameWon) return; // Don't allow movement if game is won
             
+            const currentTime = Date.now();
+            
             // Player 1 (Girl) - WASD controls
             if (keys['KeyA']) {
                 player1.x -= player1.speed;
                 player1.isMoving = true;
                 player1.direction = 'left';
+                player1.lastMoveTime = currentTime;
             }
             if (keys['KeyD']) {
                 player1.x += player1.speed;
                 player1.isMoving = true;
                 player1.direction = 'right';
+                player1.lastMoveTime = currentTime;
             }
             if (keys['KeyW']) {
                 player1.y -= player1.speed;
                 player1.isMoving = true;
+                player1.lastMoveTime = currentTime;
             }
             if (keys['KeyS']) {
                 player1.y += player1.speed;
                 player1.isMoving = true;
+                player1.lastMoveTime = currentTime;
             }
 
             // Player 2 - either human or AI
@@ -846,19 +929,23 @@
                     player2.x -= player2.speed;
                     player2.isMoving = true;
                     player2.direction = 'left';
+                    player2.lastMoveTime = currentTime;
                 }
                 if (keys['ArrowRight']) {
                     player2.x += player2.speed;
                     player2.isMoving = true;
                     player2.direction = 'right';
+                    player2.lastMoveTime = currentTime;
                 }
                 if (keys['ArrowUp']) {
                     player2.y -= player2.speed;
                     player2.isMoving = true;
+                    player2.lastMoveTime = currentTime;
                 }
                 if (keys['ArrowDown']) {
                     player2.y += player2.speed;
                     player2.isMoving = true;
+                    player2.lastMoveTime = currentTime;
                 }
             }
 
@@ -1296,6 +1383,7 @@
                     targetPlayer.x += (dx / distance) * targetPlayer.speed;
                     targetPlayer.y += (dy / distance) * targetPlayer.speed;
                     targetPlayer.isMoving = true;
+                    targetPlayer.lastMoveTime = Date.now();
                 }
             }
         });
@@ -1370,7 +1458,7 @@
             // Update UI based on game mode
             if (isAIPlayer) {
                 document.getElementById('player2Label').innerHTML = '🤖 Computer AI';
-                document.getElementById('gameTitle').textContent = '🏆 Single Player Race to 10,000! 🏀';
+                document.getElementById('gameTitle').textContent = '🏆 Single Player Race to 1,000! 🏀';
                 document.getElementById('player2Controls').innerHTML = '🤖 Computer AI: Automatic';
                 document.getElementById('controlsInfo').innerHTML = `
                     <strong>🎮 Controls:</strong> 
@@ -1380,7 +1468,7 @@
                 `;
             } else {
                 document.getElementById('player2Label').innerHTML = '👦 Player 2 (Boy)';
-                document.getElementById('gameTitle').textContent = '🏆 2-Player Bouncing Balls Race to 10,000! 🏀';
+                document.getElementById('gameTitle').textContent = '🏆 2-Player Bouncing Balls Race to 1,000! 🏀';
                 document.getElementById('player2Controls').innerHTML = '👦 Player 2: Arrow Keys';
                 document.getElementById('controlsInfo').innerHTML = `
                     <strong>🎮 Controls:</strong> 
@@ -1451,7 +1539,18 @@
                     
                     // Score based on ball value and distance
                     const ballValue = Math.floor(ball.radius / 5);
-                    const score = ballValue / (distance + 1) * this.skill;
+                    let score = ballValue / (distance + 1) * this.skill;
+                    
+                    // Heavily penalize balls in corners to prevent camping
+                    if (ball.isInCorner()) {
+                        score *= 0.3; // Reduce score for corner balls
+                    }
+                    
+                    // Penalize balls on cooldown
+                    const currentTime = Date.now();
+                    if ((currentTime - ball.lastScored) < ball.scoreCooldown) {
+                        score *= 0.1; // Greatly reduce score for balls on cooldown
+                    }
                     
                     // Add some randomness to make AI less predictable
                     const randomFactor = 0.7 + Math.random() * 0.6;
@@ -1474,6 +1573,25 @@
                 const distance = Math.sqrt(dx * dx + dy * dy);
                 
                 if (distance > 5) {
+                    // If target ball is in corner and we haven't moved recently, move away briefly
+                    if (this.targetBall.isInCorner() && (Date.now() - player2.lastMoveTime) > 1500) {
+                        // Move towards center of screen to avoid camping
+                        const centerX = canvas.width / 2;
+                        const centerY = canvas.height / 2;
+                        const toCenterX = centerX - player2.x;
+                        const toCenterY = centerY - player2.y;
+                        const toCenterDistance = Math.sqrt(toCenterX * toCenterX + toCenterY * toCenterY);
+                        
+                        if (toCenterDistance > 50) {
+                            player2.x += (toCenterX / toCenterDistance) * player2.speed * 0.5;
+                            player2.y += (toCenterY / toCenterDistance) * player2.speed * 0.5;
+                            player2.isMoving = true;
+                            player2.lastMoveTime = Date.now();
+                            player2.direction = toCenterX > 0 ? 'right' : 'left';
+                            return;
+                        }
+                    }
+                    
                     // Move towards target with some imperfection
                     const moveSpeed = player2.speed * (0.7 + Math.random() * 0.3); // Variable speed
                     const accuracy = this.skill * (0.8 + Math.random() * 0.4); // Variable accuracy
@@ -1481,6 +1599,7 @@
                     player2.x += (dx / distance) * moveSpeed * accuracy;
                     player2.y += (dy / distance) * moveSpeed * accuracy;
                     player2.isMoving = true;
+                    player2.lastMoveTime = Date.now();
                     
                     // Update direction based on movement
                     player2.direction = dx > 0 ? 'right' : 'left';
@@ -1600,11 +1719,14 @@
             player2ScoreElement.textContent = player2Score;
             player2ClicksElement.textContent = player2Clicks;
             
-            // Reset player positions
+            // Reset player positions and movement tracking
+            const currentTime = Date.now();
             player1.x = canvas.width / 4;
             player1.y = canvas.height - 120;
+            player1.lastMoveTime = currentTime;
             player2.x = (canvas.width / 4) * 3;
             player2.y = canvas.height - 120;
+            player2.lastMoveTime = currentTime;
             
             // Create new balls
             createBalls();
