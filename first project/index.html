@@ -192,6 +192,189 @@
             background: rgba(255,255,255,0.4);
         }
         
+        /* Winner Modal Styles */
+        .winner-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            backdrop-filter: blur(10px);
+        }
+        
+        .winner-content {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            color: white;
+            border: 3px solid white;
+            box-shadow: 0 0 50px rgba(255, 255, 255, 0.5);
+            max-width: 90%;
+            animation: celebrateWin 1s ease-out;
+        }
+        
+        @keyframes celebrateWin {
+            0% {
+                transform: scale(0.5) rotate(-10deg);
+                opacity: 0;
+            }
+            50% {
+                transform: scale(1.1) rotate(5deg);
+            }
+            100% {
+                transform: scale(1) rotate(0deg);
+                opacity: 1;
+            }
+        }
+        
+        .winner-title {
+            font-size: clamp(2rem, 8vw, 4rem);
+            margin: 0 0 20px 0;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.5);
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+        
+        @keyframes glow {
+            from {
+                text-shadow: 3px 3px 6px rgba(0,0,0,0.5), 0 0 30px rgba(255,255,255,0.5);
+            }
+            to {
+                text-shadow: 3px 3px 6px rgba(0,0,0,0.5), 0 0 50px rgba(255,255,255,0.8);
+            }
+        }
+        
+        .winner-score {
+            font-size: clamp(1.2rem, 4vw, 2rem);
+            margin: 10px 0;
+            font-weight: bold;
+        }
+        
+        .winner-buttons {
+            margin-top: 30px;
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .winner-button {
+            background: rgba(255,255,255,0.2);
+            border: 2px solid white;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        
+        .winner-button:hover {
+            background: rgba(255,255,255,0.4);
+            transform: scale(1.05);
+        }
+        
+        .fireworks {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+        }
+        
+        .firework {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            animation: fireworkAnimation 2s ease-out infinite;
+        }
+        
+        @keyframes fireworkAnimation {
+            0% {
+                transform: scale(0);
+                opacity: 1;
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                transform: scale(20);
+                opacity: 0;
+            }
+        }
+        
+        /* Game Mode Selection Styles */
+        .mode-selection {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10001;
+            flex-direction: column;
+        }
+        
+        .mode-content {
+            background: rgba(255,255,255,0.2);
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            color: white;
+            border: 3px solid white;
+            box-shadow: 0 0 50px rgba(255, 255, 255, 0.5);
+            max-width: 90%;
+            backdrop-filter: blur(10px);
+        }
+        
+        .mode-title {
+            font-size: clamp(1.8rem, 6vw, 3rem);
+            margin: 0 0 30px 0;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.5);
+        }
+        
+        .mode-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+        
+        .mode-button {
+            background: rgba(255,255,255,0.2);
+            border: 2px solid white;
+            color: white;
+            padding: 20px 30px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 18px;
+            transition: all 0.3s ease;
+            min-width: 180px;
+        }
+        
+        .mode-button:hover {
+            background: rgba(255,255,255,0.4);
+            transform: scale(1.05);
+        }
+        
+        .mode-description {
+            font-size: 14px;
+            margin-top: 10px;
+            opacity: 0.9;
+        }
+        
         /* Mobile responsiveness */
         @media (max-width: 768px) {
             body {
@@ -230,18 +413,37 @@
     </style>
 </head>
 <body>
-    <h1>👧👦 2-Player Bouncing Balls Competition 🏀</h1>
+    <!-- Game Mode Selection -->
+    <div id="modeSelection" class="mode-selection">
+        <div class="mode-content">
+            <h1 class="mode-title">🏆 Bouncing Balls Race to 10,000! 🏀</h1>
+            <p style="font-size: 16px; margin-bottom: 30px;">Choose your game mode:</p>
+            
+            <div class="mode-buttons">
+                <button class="mode-button" onclick="selectGameMode('single')">
+                    🤖 Single Player<br>
+                    <div class="mode-description">vs Computer AI</div>
+                </button>
+                <button class="mode-button" onclick="selectGameMode('multiplayer')">
+                    👥 Two Players<br>
+                    <div class="mode-description">Local Multiplayer</div>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <h1 id="gameTitle" style="display: none;">🏆 2-Player Bouncing Balls Race to 10,000! 🏀</h1>
     
-    <div class="game-container">
+    <div class="game-container" id="gameContainer" style="display: none;">
         <div class="top-controls">
             <div class="score-board">
                 <div style="color: #FF69B4; font-weight: bold;">👧 Player 1 (Girl)</div>
-                <div>Score: <span id="player1Score">0</span></div>
+                <div>Score: <span id="player1Score">0</span> / 10,000</div>
                 <div>Clicks: <span id="player1Clicks">0</span></div>
             </div>
             <div class="score-board">
-                <div style="color: #4169E1; font-weight: bold;">👦 Player 2 (Boy)</div>
-                <div>Score: <span id="player2Score">0</span></div>
+                <div style="color: #4169E1; font-weight: bold;" id="player2Label">👦 Player 2 (Boy)</div>
+                <div>Score: <span id="player2Score">0</span> / 10,000</div>
                 <div>Clicks: <span id="player2Clicks">0</span></div>
             </div>
             <div class="sound-controls">
@@ -249,11 +451,14 @@
                 <button id="soundToggle">ON</button>
                 <input type="range" id="volumeSlider" min="0" max="100" value="50" style="width: 80px;">
             </div>
-            <div class="controls-info" style="background: rgba(255,255,255,0.2); padding: 8px 15px; border-radius: 15px; backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.3); color: white; text-align: center; font-size: 12px;">
+            <div id="controlsInfo" class="controls-info" style="background: rgba(255,255,255,0.2); padding: 8px 15px; border-radius: 15px; backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.3); color: white; text-align: center; font-size: 12px;">
                 <strong>🎮 Controls:</strong> 
                 <span style="color: #FF69B4;">👧 Player 1: WASD</span> • 
-                <span style="color: #4169E1;">👦 Player 2: Arrow Keys</span> • 
+                <span style="color: #4169E1;" id="player2Controls">👦 Player 2: Arrow Keys</span> • 
                 Touch & drag on mobile
+            </div>
+            <div class="controls-info" style="background: rgba(255,215,0,0.3); padding: 8px 15px; border-radius: 15px; backdrop-filter: blur(10px); border: 2px solid #FFD700; color: white; text-align: center; font-size: 12px; margin-top: 10px;">
+                <strong>🏆 Win Condition:</strong> First player to reach <strong>10,000 points</strong> wins the game!
             </div>
         </div>
         
@@ -275,6 +480,23 @@
             
             <div class="individual-controls" id="individualControls">
                 <!-- Individual ball controls will be generated here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Winner Modal -->
+    <div id="winnerModal" class="winner-modal">
+        <div class="winner-content">
+            <div class="fireworks" id="fireworks"></div>
+            <h1 class="winner-title" id="winnerTitle">🎉 WINNER! 🎉</h1>
+            <div class="winner-score" id="winnerDetails">
+                <div id="winnerPlayer">Player 1 Wins!</div>
+                <div>Final Score: <span id="winnerScore">10,000</span> points</div>
+                <div>Total Clicks: <span id="winnerClicks">0</span></div>
+            </div>
+            <div class="winner-buttons">
+                <button class="winner-button" onclick="startNewGame()">🔄 New Game</button>
+                <button class="winner-button" onclick="backToModeSelection()">🏠 Back to Menu</button>
             </div>
         </div>
     </div>
@@ -303,6 +525,10 @@
         let player2Clicks = 0;
         let soundEnabled = true;
         let volume = 0.5;
+        let gameWon = false;
+        const WINNING_SCORE = 10000;
+        let gameMode = null; // 'single' or 'multiplayer'
+        let isAIPlayer = false;
 
         // Player characters
         const player1 = {
@@ -450,6 +676,8 @@
 
             // Method to handle user click on ball
             onBallClick(playerNumber = 1) {
+                if (gameWon) return; // Don't allow scoring if game is won
+                
                 this.bounceCount++;
                 this.lastInteraction = Date.now(); // Mark as recently touched
                 const points = Math.floor(this.radius / 5);
@@ -469,6 +697,12 @@
                 // Play sound with frequency based on ball size and position
                 const frequency = 200 + (50 - this.radius) * 10 + (this.y / canvas.height) * 200;
                 playBounceSound(frequency, 0.1);
+                
+                // Native haptic feedback for Android app
+                triggerHapticFeedback(points > 6 ? 'success' : 'impact');
+                
+                // Check for win condition
+                checkForWinner();
             }
 
             draw() {
@@ -580,6 +814,8 @@
 
         // Player functions
         function updatePlayers() {
+            if (gameWon) return; // Don't allow movement if game is won
+            
             // Player 1 (Girl) - WASD controls
             if (keys['KeyA']) {
                 player1.x -= player1.speed;
@@ -600,24 +836,30 @@
                 player1.isMoving = true;
             }
 
-            // Player 2 (Boy) - Arrow key controls
-            if (keys['ArrowLeft']) {
-                player2.x -= player2.speed;
-                player2.isMoving = true;
-                player2.direction = 'left';
-            }
-            if (keys['ArrowRight']) {
-                player2.x += player2.speed;
-                player2.isMoving = true;
-                player2.direction = 'right';
-            }
-            if (keys['ArrowUp']) {
-                player2.y -= player2.speed;
-                player2.isMoving = true;
-            }
-            if (keys['ArrowDown']) {
-                player2.y += player2.speed;
-                player2.isMoving = true;
+            // Player 2 - either human or AI
+            if (isAIPlayer) {
+                // AI controls Player 2
+                aiPlayer.update();
+            } else {
+                // Human Player 2 (Boy) - Arrow key controls
+                if (keys['ArrowLeft']) {
+                    player2.x -= player2.speed;
+                    player2.isMoving = true;
+                    player2.direction = 'left';
+                }
+                if (keys['ArrowRight']) {
+                    player2.x += player2.speed;
+                    player2.isMoving = true;
+                    player2.direction = 'right';
+                }
+                if (keys['ArrowUp']) {
+                    player2.y -= player2.speed;
+                    player2.isMoving = true;
+                }
+                if (keys['ArrowDown']) {
+                    player2.y += player2.speed;
+                    player2.isMoving = true;
+                }
             }
 
             // Keep players within canvas bounds
@@ -948,26 +1190,13 @@
         });
 
         resetBalls.addEventListener('click', () => {
-            player1Score = 0;
-            player2Score = 0;
-            player1Clicks = 0;
-            player2Clicks = 0;
-            player1ScoreElement.textContent = player1Score;
-            player1ClicksElement.textContent = player1Clicks;
-            player2ScoreElement.textContent = player2Score;
-            player2ClicksElement.textContent = player2Clicks;
-            
-            // Reset player positions
-            player1.x = canvas.width / 4;
-            player1.y = canvas.height - 120;
-            player2.x = (canvas.width / 4) * 3;
-            player2.y = canvas.height - 120;
-            
-            createBalls();
+            startNewGame();
         });
 
         // Touch and click interaction
         function handleInteraction(e) {
+            if (gameWon) return; // Don't allow interaction if game is won
+            
             e.preventDefault();
             const rect = canvas.getBoundingClientRect();
             const scaleX = canvas.width / rect.width;
@@ -1049,8 +1278,14 @@
                 const touchX = (e.touches[0].clientX - rect.left) * scaleX;
                 const touchY = (e.touches[0].clientY - rect.top) * scaleY;
                 
-                // Left side controls player 1, right side controls player 2
-                const targetPlayer = touchX < canvas.width / 2 ? player1 : player2;
+                // In single player mode, touch controls only player 1
+                // In multiplayer mode, left side controls player 1, right side controls player 2
+                let targetPlayer;
+                if (isAIPlayer) {
+                    targetPlayer = player1; // Only control player 1 in AI mode
+                } else {
+                    targetPlayer = touchX < canvas.width / 2 ? player1 : player2;
+                }
                 
                 // Move player towards touch position
                 const dx = touchX - targetPlayer.x;
@@ -1065,11 +1300,9 @@
             }
         });
 
-        // Initialize
+        // Initialize (but don't start game until mode is selected)
         window.addEventListener('resize', resizeCanvas);
         resizeCanvas();
-        createBalls();
-        animate();
 
         // Enable audio context on first user interaction
         document.addEventListener('click', () => {
@@ -1077,6 +1310,310 @@
                 audioContext.resume();
             }
         }, { once: true });
+
+        // Native app features (Capacitor)
+        let Haptics, StatusBar, SplashScreen;
+        
+        // Initialize Capacitor plugins if available (for native Android app)
+        async function initializeNativeFeatures() {
+            try {
+                if (window.Capacitor) {
+                    const { Haptics: HapticsPlugin } = await import('@capacitor/haptics');
+                    const { StatusBar: StatusBarPlugin } = await import('@capacitor/status-bar');
+                    const { SplashScreen: SplashScreenPlugin } = await import('@capacitor/splash-screen');
+                    
+                    Haptics = HapticsPlugin;
+                    StatusBar = StatusBarPlugin;
+                    SplashScreen = SplashScreenPlugin;
+                    
+                    // Configure status bar for Android
+                    await StatusBar.setStyle({ style: 'dark' });
+                    await StatusBar.setBackgroundColor({ color: '#667eea' });
+                    
+                    // Hide splash screen after game loads
+                    setTimeout(() => {
+                        SplashScreen.hide();
+                    }, 1000);
+                    
+                    console.log('Native features initialized');
+                }
+            } catch (error) {
+                console.log('Running in web mode - native features not available');
+            }
+        }
+
+        // Native haptic feedback function
+        async function triggerHapticFeedback(type = 'light') {
+            try {
+                if (Haptics && window.Capacitor) {
+                    if (type === 'success') {
+                        await Haptics.notification({ type: 'success' });
+                    } else if (type === 'impact') {
+                        await Haptics.impact({ style: 'medium' });
+                    } else {
+                        await Haptics.impact({ style: 'light' });
+                    }
+                }
+            } catch (error) {
+                // Haptics not available, ignore silently
+            }
+        }
+
+        // Initialize native features when page loads
+        initializeNativeFeatures();
+
+        // Game mode selection functions
+        function selectGameMode(mode) {
+            gameMode = mode;
+            isAIPlayer = (mode === 'single');
+            
+            // Update UI based on game mode
+            if (isAIPlayer) {
+                document.getElementById('player2Label').innerHTML = '🤖 Computer AI';
+                document.getElementById('gameTitle').textContent = '🏆 Single Player Race to 10,000! 🏀';
+                document.getElementById('player2Controls').innerHTML = '🤖 Computer AI: Automatic';
+                document.getElementById('controlsInfo').innerHTML = `
+                    <strong>🎮 Controls:</strong> 
+                    <span style="color: #FF69B4;">👧 Player 1: WASD</span> • 
+                    <span style="color: #4169E1;">🤖 Computer AI: Automatic</span> • 
+                    Touch & drag (controls player 1 only)
+                `;
+            } else {
+                document.getElementById('player2Label').innerHTML = '👦 Player 2 (Boy)';
+                document.getElementById('gameTitle').textContent = '🏆 2-Player Bouncing Balls Race to 10,000! 🏀';
+                document.getElementById('player2Controls').innerHTML = '👦 Player 2: Arrow Keys';
+                document.getElementById('controlsInfo').innerHTML = `
+                    <strong>🎮 Controls:</strong> 
+                    <span style="color: #FF69B4;">👧 Player 1: WASD</span> • 
+                    <span style="color: #4169E1;">👦 Player 2: Arrow Keys</span> • 
+                    Touch & drag (left/right sides)
+                `;
+            }
+            
+            // Hide mode selection and show game
+            document.getElementById('modeSelection').style.display = 'none';
+            document.getElementById('gameTitle').style.display = 'block';
+            document.getElementById('gameContainer').style.display = 'flex';
+            
+            // Start the game
+            resizeCanvas();
+            createBalls();
+            animate();
+        }
+
+        function backToModeSelection() {
+            // Reset game state
+            gameWon = false;
+            gameMode = null;
+            isAIPlayer = false;
+            
+            // Hide winner modal and game
+            document.getElementById('winnerModal').style.display = 'none';
+            document.getElementById('gameTitle').style.display = 'none';
+            document.getElementById('gameContainer').style.display = 'none';
+            
+            // Show mode selection
+            document.getElementById('modeSelection').style.display = 'flex';
+        }
+
+        // AI Player Logic
+        const aiPlayer = {
+            targetBall: null,
+            lastDecisionTime: 0,
+            reactionDelay: 300, // AI reaction time in milliseconds
+            skill: 0.8, // AI skill level (0-1, where 1 is perfect)
+            
+            update() {
+                if (!isAIPlayer || gameWon) return;
+                
+                const currentTime = Date.now();
+                
+                // Make decisions every few milliseconds
+                if (currentTime - this.lastDecisionTime > this.reactionDelay) {
+                    this.makeDecision();
+                    this.lastDecisionTime = currentTime;
+                }
+                
+                // Move towards target
+                this.moveTowardsTarget();
+            },
+            
+            makeDecision() {
+                // Find the best ball to target
+                let bestBall = null;
+                let bestScore = -1;
+                
+                balls.forEach(ball => {
+                    const distance = Math.sqrt(
+                        Math.pow(ball.x - player2.x, 2) + 
+                        Math.pow(ball.y - player2.y, 2)
+                    );
+                    
+                    // Score based on ball value and distance
+                    const ballValue = Math.floor(ball.radius / 5);
+                    const score = ballValue / (distance + 1) * this.skill;
+                    
+                    // Add some randomness to make AI less predictable
+                    const randomFactor = 0.7 + Math.random() * 0.6;
+                    const finalScore = score * randomFactor;
+                    
+                    if (finalScore > bestScore) {
+                        bestScore = finalScore;
+                        bestBall = ball;
+                    }
+                });
+                
+                this.targetBall = bestBall;
+            },
+            
+            moveTowardsTarget() {
+                if (!this.targetBall) return;
+                
+                const dx = this.targetBall.x - player2.x;
+                const dy = this.targetBall.y - player2.y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+                
+                if (distance > 5) {
+                    // Move towards target with some imperfection
+                    const moveSpeed = player2.speed * (0.7 + Math.random() * 0.3); // Variable speed
+                    const accuracy = this.skill * (0.8 + Math.random() * 0.4); // Variable accuracy
+                    
+                    player2.x += (dx / distance) * moveSpeed * accuracy;
+                    player2.y += (dy / distance) * moveSpeed * accuracy;
+                    player2.isMoving = true;
+                    
+                    // Update direction based on movement
+                    player2.direction = dx > 0 ? 'right' : 'left';
+                }
+            }
+        };
+
+        // Winner functions
+        function checkForWinner() {
+            if (gameWon) return;
+            
+            let winner = null;
+            let winnerScore = 0;
+            let winnerClicks = 0;
+            let winnerColor = '';
+            
+            if (player1Score >= WINNING_SCORE) {
+                winner = 1;
+                winnerScore = player1Score;
+                winnerClicks = player1Clicks;
+                winnerColor = '#FF69B4';
+            } else if (player2Score >= WINNING_SCORE) {
+                winner = 2;
+                winnerScore = player2Score;
+                winnerClicks = player2Clicks;
+                winnerColor = '#4169E1';
+            }
+            
+            if (winner) {
+                gameWon = true;
+                showWinnerModal(winner, winnerScore, winnerClicks, winnerColor);
+            }
+        }
+
+        function showWinnerModal(playerNumber, score, clicks, color) {
+            const modal = document.getElementById('winnerModal');
+            const winnerPlayer = document.getElementById('winnerPlayer');
+            const winnerScore = document.getElementById('winnerScore');
+            const winnerClicks = document.getElementById('winnerClicks');
+            const winnerTitle = document.getElementById('winnerTitle');
+            
+            // Update modal content based on game mode
+            let playerName = '';
+            if (playerNumber === 1) {
+                playerName = '(Girl) 👧';
+            } else {
+                playerName = isAIPlayer ? '(Computer AI) 🤖' : '(Boy) 👦';
+            }
+            
+            winnerPlayer.textContent = `🎉 Player ${playerNumber} ${playerName} Wins! 🎉`;
+            winnerPlayer.style.color = color;
+            winnerScore.textContent = score.toLocaleString();
+            winnerClicks.textContent = clicks;
+            
+            // Show modal
+            modal.style.display = 'flex';
+            
+            // Create fireworks
+            createFireworks();
+            
+            // Play celebration sound
+            playCelebrationSound();
+            
+            // Haptic feedback for celebration
+            triggerHapticFeedback('success');
+        }
+
+        function createFireworks() {
+            const fireworksContainer = document.getElementById('fireworks');
+            fireworksContainer.innerHTML = '';
+            
+            const colors = ['#FFD700', '#FF69B4', '#4169E1', '#00FF00', '#FF4500', '#9400D3'];
+            
+            for (let i = 0; i < 20; i++) {
+                setTimeout(() => {
+                    const firework = document.createElement('div');
+                    firework.className = 'firework';
+                    firework.style.left = Math.random() * 100 + '%';
+                    firework.style.top = Math.random() * 100 + '%';
+                    firework.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                    firework.style.animationDelay = Math.random() * 2 + 's';
+                    
+                    fireworksContainer.appendChild(firework);
+                    
+                    // Remove firework after animation
+                    setTimeout(() => {
+                        if (firework.parentNode) {
+                            firework.parentNode.removeChild(firework);
+                        }
+                    }, 2000);
+                }, i * 100);
+            }
+        }
+
+        function playCelebrationSound() {
+            // Play a series of celebration notes
+            const notes = [523, 659, 784, 1047]; // C, E, G, C (major chord)
+            
+            notes.forEach((frequency, index) => {
+                setTimeout(() => {
+                    playBounceSound(frequency, 0.3);
+                }, index * 150);
+            });
+        }
+
+        function startNewGame() {
+            // Reset all game state
+            gameWon = false;
+            player1Score = 0;
+            player2Score = 0;
+            player1Clicks = 0;
+            player2Clicks = 0;
+            
+            // Update UI
+            player1ScoreElement.textContent = player1Score;
+            player1ClicksElement.textContent = player1Clicks;
+            player2ScoreElement.textContent = player2Score;
+            player2ClicksElement.textContent = player2Clicks;
+            
+            // Reset player positions
+            player1.x = canvas.width / 4;
+            player1.y = canvas.height - 120;
+            player2.x = (canvas.width / 4) * 3;
+            player2.y = canvas.height - 120;
+            
+            // Create new balls
+            createBalls();
+            
+            // Hide modal
+            document.getElementById('winnerModal').style.display = 'none';
+        }
+
+
 
         // Register Service Worker for PWA
         if ('serviceWorker' in navigator) {

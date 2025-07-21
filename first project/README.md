@@ -2,6 +2,20 @@
 
 A fun, competitive mobile game where two players compete to collect bouncing balls using animated characters!
 
+## 📱 Available Versions
+
+### 🌐 Progressive Web App (PWA) - iPhone & Android
+- Install directly from Safari (iOS) or Chrome (Android)
+- Works like a native app when installed
+- No app store needed
+- Quick and easy setup
+
+### 🤖 Native Android App (APK)
+- True native Android application
+- Can be published to Google Play Store
+- Enhanced performance and native features
+- Requires Android Studio for building
+
 ## 📱 Install on iPhone (iOS)
 
 ### Method 1: Direct PWA Installation (Recommended)
@@ -173,5 +187,44 @@ your-game-folder/
 - Use landscape mode on tablet/phone
 - Two players side by side
 - Set target score for matches (e.g., first to 100 points wins)
+
+## 🤖 Build Native Android App
+
+Want a real Android APK that can be published to Google Play Store? Follow these steps:
+
+### Quick Setup (Automated)
+**For Mac/Linux:**
+```bash
+chmod +x setup-android.sh
+./setup-android.sh
+```
+
+**For Windows:**
+```cmd
+setup-android.bat
+```
+
+### Manual Setup
+See `android-build-instructions.md` for detailed step-by-step instructions.
+
+### What You Get
+- **True native Android app** (APK file)
+- **Haptic feedback** when collecting balls
+- **Enhanced performance** with native WebView
+- **Custom splash screen** and app icon
+- **Google Play Store ready**
+- **Better Android integration**
+
+### Requirements
+- Node.js (16+)
+- Android Studio
+- Java Development Kit (JDK 11+)
+
+### Android-Specific Features
+- **Native haptic feedback** - phone vibrates when collecting balls
+- **Optimized touch handling** for Android devices
+- **Custom app icons** for all Android screen densities
+- **Native splash screen** with your game branding
+- **Better performance** than web version
 
 Enjoy your mobile bouncing balls competition! 🏆 
